@@ -8,16 +8,17 @@ This hybrid design enables scalability, data flexibility, and support for multip
 ---
 
 ## Section 2: Numbered Flow (Request → Response)
-
-### A. Dashboard (Thymeleaf + MySQL)
-1. **User action:** Admin or Doctor requests a dashboard page (e.g., `/adminDashboard`, `/doctorDashboard`).  
-2. **Thymeleaf Controller:** The request is routed to a **Thymeleaf controller** in the Spring Boot app.  
-3. **Service Layer:** The controller calls the **Service Layer** for business logic.  
-4. **MySQL Repository:** The service queries a **MySQL repository**.  
-5. **MySQL Database:** The repository fetches **JPA entities** (`Patient`, `Doctor`, `Appointment`, `Admin`) from the relational database.  
-6. **Data return:** Entities are returned to the service layer.  
-7. **Rendering:** The controller passes the data into a **Thymeleaf template**, which is rendered as HTML and sent back to the browser.  
-
+1) Client requests a page (Admin/Doctor dashboards) or calls a REST endpoint (Patients/Appointments).
+2) Spring routes to the appropriate controller: **Thymeleaf MVC** (HTML) or **@RestController** (JSON).
+3) The controller delegates to the **Service Layer** for business logic and validation.
+4) The service calls the **Repository Layer** as needed.
+5) Repositories access data sources:
+   - **MySQL via JPA** for Patient, Doctor, Appointment, Admin (entities).
+   - **MongoDB via Spring Data** for Prescription (documents).
+6) The service composes/returns results (and may combine MySQL + MongoDB data).
+7) The controller returns the response:
+   - **Thymeleaf** renders HTML for dashboards.
+   - **REST** returns serialized **JSON** for API clients.
 ---
 
 ### B. REST API (JSON + MongoDB/MySQL)
@@ -32,7 +33,7 @@ This hybrid design enables scalability, data flexibility, and support for multip
 
 ---
 
-✅ This document mirrors the reference diagram:  
+This document mirrors the reference diagram:  
 - Dashboards → Thymeleaf Controllers → Service → MySQL  
 - REST Modules → REST Controllers → Service → MySQL + MongoDB  
 
